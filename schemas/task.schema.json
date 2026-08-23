@@ -1,0 +1,5 @@
+{
+  "$schema":"http://json-schema.org/draft-07/schema#","title":"Task","type":"object",
+  "required":["object_type","id","version","name","kind","lifecycle","outputs","validation"],
+  "properties":{"object_type":{"const":"task"},"schema_version":{"type":"integer","minimum":1},"id":{"type":"string","pattern":"^[a-z0-9][a-z0-9-]*$"},"version":{"type":"integer","minimum":1},"name":{"type":"string","minLength":1},"kind":{"enum":["recurring","one_time","derived"]},"lifecycle":{"type":"object","required":["status"]},"outputs":{"type":"array","minItems":1},"validation":{"type":"array","minItems":1},"dependencies":{"type":"array"},"schedule":{"type":["object","null"]}}
+}

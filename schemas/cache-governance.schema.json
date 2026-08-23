@@ -1,0 +1,5 @@
+{
+  "$schema":"http://json-schema.org/draft-07/schema","title":"Cache governance","type":"object",
+  "required":["object_type","cache_key","usage_count","tier","decision"],
+  "properties":{"object_type":{"const":"cache_governance_record"},"cache_key":{"type":"string"},"usage_count":{"type":"integer","minimum":0},"last_accessed":{"type":["string","null"]},"tier":{"enum":["cold","warm","pinned"]},"decision":{"enum":["keep","evictable","evicted","pinned"]},"reason":{"type":"string"}}
+}

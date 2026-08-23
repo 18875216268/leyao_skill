@@ -23,8 +23,7 @@ AI 调用面（只暴露 4 个命令，数据库配置全部封在脚本内，AI
 - 每次请求前经 _assert_safe_url() 白名单断言（仅允许容器读 + 单条凭证写删）；
 - 规则层最终兜底：leyou_zhiku 之外任何子节点命中 $other validate:false 被 Firebase 拒绝。
 
-配套前提：Firebase 控制台规则需将 leyou_zhiku 配置为凭证列表容器（$creds），
-粘贴前先运行 leyou_zhiku_rules_check.py 校验（补丁见 leyou_zhiku_rules_patch.json）。
+配套前提：Firebase 控制台规则需将 leyou_zhiku 配置为凭证列表容器（$creds）。
 """
 from __future__ import annotations
 
@@ -47,9 +46,7 @@ from urllib.parse import quote
 class FirGuizeLeixing(StrEnum):
     """云端保存的规则类型。"""
 
-    SHANGCHUAN_YINGSHE = "shangchuan_yingshe"
-    HUITIAN_MINGMING = "huitian_mingming"
-    LEYOU_ZHIKU = "leyou_zhiku"  # 第三节点：云智库登录凭证列表
+    LEYOU_ZHIKU = "leyou_zhiku"  # 云智库登录凭证列表
 
 
 @dataclass(frozen=True, slots=True)
@@ -94,7 +91,6 @@ ZHIKU_BASE = FIR_PEIZHI.guize_dizhi(FirGuizeLeixing.LEYOU_ZHIKU)  # .../pms/1887
 ZHIKU_DIR = ZHIKU_BASE[: -len(".json")]                          # .../pms/18875216268/leyou_zhiku（单条父路径）
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) leyou-firebase-login/0.3"
 
-PREFIX = FIR_PEIZHI.database_url.rstrip("/") + "/pms/18875216268/"
 KEY_RE = re.compile(r"^[0-9a-f]{12}$")  # 凭证键 = token 摘要，12 位十六进制
 
 
@@ -138,7 +134,7 @@ def account_fingerprint(creds, id_field=None):
     return token, "token"
 
 
-def resolve_target_key(container, fp, token):
+def resolve_target_key(container, fp, token, id_field=None):
     """决定写入键：同账号(同指纹) → 复用旧条目键（覆盖更新，键保持稳定）；
     异账号 → 新增指纹键。同时返回需迁移清理的旧格式键（按 token 摘要生成）。
 
@@ -153,7 +149,7 @@ def resolve_target_key(container, fp, token):
             continue
         if not meta.get("token"):
             continue
-        if account_fingerprint(meta)[0] == fp:
+        if account_fingerprint(meta, id_field)[0] == fp:
             target_key = k  # 同账号 → 覆盖旧条目（键保持稳定）
             break
     legacy_key = cred_key(token)  # 旧版按 token 摘要生成的键，用于迁移清理
@@ -235,8 +231,6 @@ def creds_to_local(creds):
         "token": c.get("token"), "uuid": c.get("uuid"),
         "login_at": c.get("login_at"), "expires_at": c.get("expires_at"),
         "watermark": c.get("watermark"),
-        "tenant_id": c.get("tenant_id"), "widget_id": c.get("widget_id"),
-        "site": c.get("site"),
     }
     TOKEN_FILE.write_text(json.dumps(store, ensure_ascii=False, indent=2), encoding="utf-8")
     return store
@@ -324,7 +318,7 @@ def auto_login(scan=True, id_field=None):
     save_err, saved, action = None, False, "added"
     try:
         container = fb_get_container() or {}
-        target_key, legacy_key = resolve_target_key(container, fp, token)
+        target_key, legacy_key = resolve_target_key(container, fp, token, id_field)
         action = "updated" if target_key != cred_key(fp) else "added"
         fb_put_entry(target_key, json.dumps(lg, ensure_ascii=False), int(time.time() * 1000))
         saved = True
@@ -413,7 +407,7 @@ def main(argv=None):
                 return 3
             fp, fp_src = account_fingerprint(c, args.id_field)
             container = fb_get_container() or {}
-            target_key, legacy_key = resolve_target_key(container, fp, c["token"])
+            target_key, legacy_key = resolve_target_key(container, fp, c["token"], args.id_field)
             action = "updated" if target_key != cred_key(fp) else "added"
             fb_put_entry(target_key, json.dumps(c, ensure_ascii=False), int(time.time() * 1000))
             if legacy_key in container and legacy_key != target_key:

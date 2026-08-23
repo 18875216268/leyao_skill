@@ -1,0 +1,17 @@
+{
+  "object_type":"task",
+  "schema_version":1,
+  "id":"project-progress",
+  "version":1,
+  "name":"项目进度统计",
+  "kind":"recurring",
+  "lifecycle":{"status":"draft"},
+  "scope":{},
+  "sources":[],
+  "metrics":[],
+  "workflow":{"version":1,"steps":[]},
+  "outputs":[{"type":"xlsx","path":"result/pending-review"}],
+  "validation":["日期覆盖完整"],
+  "dependencies":[],
+  "schedule":null
+}

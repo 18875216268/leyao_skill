@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ACS Asset Entry",
+  "description": "统一资产条目：注册表每行一个资产，声明分类/来源/信任/安全/诉求覆盖",
+  "type": "object",
+  "required": ["asset_id", "category", "name", "source", "mode", "trust", "read_only", "covers_need"],
+  "properties": {
+    "asset_id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "category": {
+      "type": "string",
+      "enum": ["knowledge", "tool", "method", "data", "template"]
+    },
+    "sub_category": { "type": "string" },
+    "name": { "type": "string", "minLength": 1 },
+    "source": { "type": "string" },
+    "mode": { "type": "string", "enum": ["api", "cli", "skill", "script", "file"] },
+    "trust": { "type": "string", "enum": ["authority", "reference", "candidate"] },
+    "network_required": { "type": "boolean", "default": false },
+    "login_required": { "type": "boolean", "default": false },
+    "read_only": { "type": "boolean", "default": true },
+    "version_policy": { "type": "string", "enum": ["checksum", "manual", "live"] },
+    "adapter": { "type": "string", "enum": ["dict", "api", "cli", "template"] },
+    "dict_source": { "type": "string" },
+    "fields": { "type": "object" },
+    "command_map": { "type": "object" },
+    "covers_need": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["term", "caliber", "tool", "data", "template", "process"] },
+      "minItems": 1
+    },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "updated_at": { "type": "string" }
+  },
+  "additionalProperties": false
+}

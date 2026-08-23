@@ -1,0 +1,235 @@
+{
+  "registry_version": "0.2.0",
+  "updated_at": "2026-08-20",
+  "categories": [
+    {
+      "id": "knowledge",
+      "name": "知识类",
+      "desc": "定义、事实、制度、课程",
+      "samples": [
+        "术语表",
+        "子公司清单",
+        "口径权威子类"
+      ]
+    },
+    {
+      "id": "tool",
+      "name": "工具类",
+      "desc": "可调用执行的能力",
+      "samples": [
+        "leyou_cloud.py",
+        "BI 查询",
+        "云智库采集"
+      ]
+    },
+    {
+      "id": "method",
+      "name": "方法类",
+      "desc": "过程、分析、SOP",
+      "samples": [
+        "业务分析方法论",
+        "复盘框架"
+      ]
+    },
+    {
+      "id": "data",
+      "name": "数据类",
+      "desc": "具体数据资产",
+      "samples": [
+        "指标基准值",
+        "报表数据",
+        "数据字典"
+      ]
+    },
+    {
+      "id": "template",
+      "name": "模板类",
+      "desc": "可填充骨架",
+      "samples": [
+        "日报/周报/复盘模板"
+      ]
+    }
+  ],
+  "assets": [
+    {
+      "asset_id": "ops-glossary",
+      "category": "knowledge",
+      "sub_category": "term",
+      "name": "运营术语表",
+      "adapter": "pool",
+      "source": "https://lyzsk.cfdaili.top/api/pool",
+      "mode": "pool",
+      "trust": "authority",
+      "network_required": false,
+      "login_required": false,
+      "read_only": true,
+      "version_policy": "manual",
+      "covers_need": [
+        "term",
+        "caliber",
+        "data"
+      ],
+      "tags": [
+        "术语",
+        "口径"
+      ],
+      "updated_at": "2026-08-22",
+      "pool_tier": "inject"
+    },
+    {
+      "asset_id": "ops-metrics",
+      "category": "knowledge",
+      "sub_category": "caliber",
+      "name": "业务指标口径",
+      "adapter": "pool",
+      "source": "https://lyzsk.cfdaili.top/api/pool",
+      "mode": "pool",
+      "trust": "authority",
+      "network_required": false,
+      "login_required": false,
+      "read_only": true,
+      "version_policy": "manual",
+      "covers_need": [
+        "caliber",
+        "data"
+      ],
+      "tags": [
+        "指标",
+        "口径"
+      ],
+      "updated_at": "2026-08-22",
+      "pool_tier": "inject"
+    },
+    {
+      "asset_id": "ops-companies",
+      "category": "knowledge",
+      "sub_category": "entity",
+      "name": "乐药集团子公司清单",
+      "adapter": "pool",
+      "source": "https://lyzsk.cfdaili.top/api/pool",
+      "mode": "pool",
+      "trust": "authority",
+      "network_required": false,
+      "login_required": false,
+      "read_only": true,
+      "version_policy": "manual",
+      "covers_need": [
+        "term",
+        "data"
+      ],
+      "tags": [
+        "子公司",
+        "组织"
+      ],
+      "updated_at": "2026-08-22",
+      "pool_tier": "inject"
+    },
+    {
+      "asset_id": "ops-methods",
+      "category": "method",
+      "sub_category": "analysis",
+      "name": "业务分析方法论",
+      "adapter": "pool",
+      "source": "https://lyzsk.cfdaili.top/api/pool",
+      "mode": "pool",
+      "trust": "reference",
+      "network_required": false,
+      "login_required": false,
+      "read_only": true,
+      "version_policy": "manual",
+      "covers_need": [
+        "process"
+      ],
+      "tags": [
+        "方法论",
+        "分析"
+      ],
+      "updated_at": "2026-08-22",
+      "pool_tier": "session"
+    },
+    {
+      "asset_id": "leyou-search",
+      "category": "tool",
+      "sub_category": "search",
+      "name": "乐药云智库搜索",
+      "adapter": "cli",
+      "source": "scripts/sources/leyou_bridge.py",
+      "mode": "cli",
+      "trust": "reference",
+      "network_required": true,
+      "login_required": true,
+      "read_only": true,
+      "version_policy": "manual",
+      "covers_need": [
+        "tool",
+        "data"
+      ],
+      "command_map": {
+        "tool": [
+          "search",
+          "{q}"
+        ],
+        "data": [
+          "search",
+          "{q}"
+        ]
+      },
+      "tags": [
+        "制度",
+        "课程",
+        "搜索"
+      ],
+      "updated_at": "2026-08-20"
+    },
+    {
+      "asset_id": "leyou-collect",
+      "category": "tool",
+      "sub_category": "collect",
+      "name": "乐药云智库全库采集",
+      "adapter": "cli",
+      "source": "scripts/sources/leyou_bridge.py",
+      "mode": "cli",
+      "trust": "reference",
+      "network_required": true,
+      "login_required": true,
+      "read_only": true,
+      "version_policy": "manual",
+      "covers_need": [
+        "data"
+      ],
+      "command_map": {
+        "data": [
+          "collect",
+          "{q}"
+        ]
+      },
+      "tags": [
+        "采集",
+        "批量"
+      ],
+      "updated_at": "2026-08-20"
+    },
+    {
+      "asset_id": "ops-templates",
+      "category": "template",
+      "sub_category": "report",
+      "name": "报表/复盘模板",
+      "adapter": "template",
+      "source": "../templates",
+      "mode": "file",
+      "trust": "reference",
+      "network_required": false,
+      "login_required": false,
+      "read_only": true,
+      "version_policy": "manual",
+      "covers_need": [
+        "template"
+      ],
+      "tags": [
+        "模板",
+        "报告"
+      ],
+      "updated_at": "2026-08-20"
+    }
+  ]
+}

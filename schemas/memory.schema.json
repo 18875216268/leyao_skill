@@ -1,0 +1,5 @@
+{
+  "$schema":"http://json-schema.org/draft-07/schema#","title":"Memory","type":"object",
+  "required":["object_type","scope","scope_id","entries"],
+  "properties":{"object_type":{"const":"memory"},"scope":{"type":"string"},"scope_id":{"type":"string"},"entries":{"type":"array"}}
+}

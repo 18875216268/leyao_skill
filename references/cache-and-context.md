@@ -50,7 +50,7 @@ operation + producer/version + 输入 checksum 集合 + 参数
 
 ```text
 输入内容、Task/Workflow/Deliverable/模板版本、intent anchor、范围、公式、脚本、
-能力注册表、解析器/策略版本、memory snapshot、context budget、用户确认、deviation。
+能力注册表、解析器/策略版本、memory snapshot、用户确认、deviation。
 ```
 
 缓存命中只复用派生结果。当前 Run 仍必须写自己的 manifest、lineage、output 和四门状态；DeliverableRun 仍必须 stage → gates → confirmed → delivered。
@@ -91,7 +91,6 @@ python scripts/cache.py key --operation analysis --producer pandas-v1 --inputs '
 python scripts/cache.py store --work-dir <dir> --namespace analysis --key <sha256-key> --producer pandas-v1 --payload '{}'
 python scripts/cache.py lookup --work-dir <dir> --key <sha256-key>
 python scripts/cache.py invalidate --work-dir <dir> --key <sha256-key> --reason input_changed
-python scripts/context_pack.py build --work-dir <dir> --run-id <id> --budget 12000 --items '[]'
 python scripts/cache_governor.py review --work-dir <dir>
 python scripts/cache_governor.py prune --work-dir <dir>           # dry-run
 python scripts/cache_governor.py prune --work-dir <dir> --apply   # only evictable payloads

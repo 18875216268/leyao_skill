@@ -1,0 +1,16 @@
+{
+  "assets": [
+    {
+      "asset_id": "dup-asset",
+      "category": "knowledge",
+      "name": "d",
+      "source": "s",
+      "mode": "api",
+      "trust": "reference",
+      "read_only": true,
+      "covers_need": [
+        "term"
+      ]
+    }
+  ]
+}

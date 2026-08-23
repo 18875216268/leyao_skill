@@ -1,0 +1,8 @@
+name = "lyzsk"
+compatibility_date = "2026-08-21"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "brf-pool"
+database_id = "e0bb1e01-d8ee-48a1-97be-a4b8880e3f40"

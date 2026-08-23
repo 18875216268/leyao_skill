@@ -1,0 +1,5 @@
+{
+  "$schema":"http://json-schema.org/draft-07/schema#","title":"Work order","type":"object",
+  "required":["object_type","id","version","status","request","task_ids","deliverable_ids"],
+  "properties":{"object_type":{"const":"work_order"},"id":{"type":"string","pattern":"^[a-z0-9][a-z0-9-]*$"},"version":{"type":"integer","minimum":1},"status":{"type":"string"},"request":{"type":"string"},"task_ids":{"type":"array","items":{"type":"string"}},"deliverable_ids":{"type":"array","items":{"type":"string"}}}
+}

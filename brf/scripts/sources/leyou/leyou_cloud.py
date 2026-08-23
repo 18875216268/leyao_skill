@@ -48,7 +48,6 @@ from requests.adapters import HTTPAdapter
 
 # ---------------- 常量（站点级，勿改） ----------------
 TENANT_ID     = "8980"
-WIDGET_ID     = "cp7nb9"
 SITE          = "https://leyohrai.helplook.net"
 BASE_GET      = "https://api-get.helplook.net"          # 只读数据域名
 BASE_API      = "https://api.helplook.net"              # 写操作 / AI 域名
@@ -183,11 +182,8 @@ def _render_svg_to_png(svg, size=64):
         cy = sp*cxp + cp*cyp + (p0[1]+p1[1])/2
         ux, uy = (x1p-cxp)/rx, (y1p-cyp)/ry
         vx, vy = (-x1p-cxp)/rx, (-y1p-cyp)/ry
-        dot = ux*vx + uy*vy
-        a1 = math.acos(max(-1.0, min(1.0, dot / (math.hypot(ux,uy)*math.hypot(vx,vy)))))
-        if ux*vy - uy*vx < 0: a1 = -a1
-        da = math.acos(max(-1.0, min(1.0, (ux*vx+uy*vy) / (math.hypot(ux,uy)*math.hypot(vx,vy)))))
-        if ux*vy - uy*vx < 0: da = -da
+        a1 = math.atan2(uy, ux)
+        da = math.atan2(vy, vx) - a1
         if not sweep and da > 0: da -= 2*math.pi
         if sweep and da < 0: da += 2*math.pi
         steps = max(6, int(abs(da) / (math.pi/24)))
@@ -284,12 +280,11 @@ def _render_svg_to_png(svg, size=64):
         if not cs: continue
         img = Image.new("RGBA", (big, big), (0, 0, 0, 0))
         px = img.load(); scale = big / 1024.0
-        scaled = [[[(x*scale, y*scale) for (x, y) in c] for c in cs]]
-        ys = big
-        for y in range(ys):
+        scaled = [[(x*scale, y*scale) for (x, y) in c] for c in cs]
+        for y in range(big):
             yy = y + 0.5
             xs = []
-            for cont in scaled[0]:
+            for cont in scaled:
                 n = len(cont)
                 for i in range(n):
                     x1, y1 = cont[i]; x2, y2 = cont[(i+1) % n]
@@ -365,7 +360,6 @@ class LeyouCloud:
         self.login_at = store.get("login_at")
         self.expires_at = store.get("expires_at")
         self.watermark = store.get("watermark")
-        self._qrcode_shown = False
 
         self.session = self._new_session()
 
@@ -386,18 +380,14 @@ class LeyouCloud:
         s.mount("http://", ad)
         return s
 
-    def _request(self, url, params=None, method="GET", headers=None, stream=False, timeout=None):
-        """带重试的 GET/POST；业务码 507 抛 TokenExpired"""
+    def _request(self, url, params=None, headers=None, stream=False, timeout=None):
+        """带重试的 GET；业务码 507 抛 TokenExpired"""
         t = timeout or self.timeout
         last = None
         for i in range(3):
             try:
-                if method == "GET":
-                    r = self.session.get(url, params=params, headers=headers,
-                                         stream=stream, timeout=t)
-                else:
-                    r = self.session.post(url, params=params, headers=headers,
-                                          json=None, data=params, timeout=t)
+                r = self.session.get(url, params=params, headers=headers,
+                                     stream=stream, timeout=t)
                 # 解析业务码
                 if not stream and "application/json" in (r.headers.get("Content-Type", "") or "") or (r.text or "").lstrip().startswith("{"):
                     try:
@@ -415,14 +405,13 @@ class LeyouCloud:
         raise last or requests.exceptions.ConnectionError("请求失败")
 
     def _get(self, url, params=None, headers=None, stream=False):
-        return self._request(url, params, "GET", headers, stream)
+        return self._request(url, params, headers, stream)
 
     def _save(self):
         _save_token_file(self.token_file, {
             "token": self.token, "uuid": self.uuid,
             "login_at": self.login_at, "expires_at": self.expires_at,
-            "watermark": self.watermark, "tenant_id": TENANT_ID,
-            "widget_id": WIDGET_ID, "site": SITE,
+            "watermark": self.watermark,
         })
 
     # ================= 阶段 1：登录 / 凭证 =================
@@ -466,7 +455,6 @@ class LeyouCloud:
         qr = requests.get(f"{QR_IMG_URL}?key={key}", headers=hdr, timeout=self.timeout)
         with open(qr_out, "wb") as f:
             f.write(qr.content)
-        self._qrcode_shown = True
 
         state = (f'{{"tannant_id":"{TENANT_ID}","source":"work_wechat",'
                  f'"redirect_uri":"{SITE.replace("https://", "https:\\\\/\\\\/")}\\\\/"}}')
@@ -689,9 +677,7 @@ class LeyouCloud:
                                font=("Microsoft YaHei UI", 10))
                 else:
                     tip.config(text="二维码已过期，请重新执行 login", fg="#C0392B")
-                root.after(200, tick)
-            else:
-                root.after(200, tick)
+            root.after(200, tick)
 
         def on_close():
             cancel["v"] = True
@@ -727,17 +713,6 @@ class LeyouCloud:
             },
         }
 
-    def ensure_login(self):
-        """阶段1入口：先判断有效性；有效直接返回，无效自动扫码登录（失败抛 LoginRequired）"""
-        ok, info = self.check_login()
-        if ok:
-            return {**self.whoami(), "source": "cache", "login_info": info}
-        if not self.auto_login:
-            raise LoginRequired
-        li = self.login(quiet=True)
-        return {**li, "source": "fresh_login"}
-
-    # ================= 阶段 2：数据操作 =================
     def search(self, keyword, page=1, pagesize=10):
         """关键字搜索（分页）"""
         r = self._get(f"{BASE_GET}/foreground/tannant/search-tannant", {
@@ -979,19 +954,6 @@ class LeyouCloud:
                 if stream_print:
                     print(line, flush=True)
         return {"ok": True, "question": question, "raw_lines": full}
-
-    # ---------- 阶段2统一入口：失效自动回阶段1 ----------
-    def guarded(self, fn, *args, **kwargs):
-        """执行阶段2操作；token 失效自动回到阶段1重登后重试一次"""
-        try:
-            return fn(*args, **kwargs)
-        except TokenExpired:
-            if not self.auto_login:
-                raise
-            _emit({"ok": False, "warn": "TOKEN_EXPIRED",
-                   "message": "token 失效，自动回到阶段1重新登录..."}, compact=False)
-            self.login(quiet=True)
-            return fn(*args, **kwargs)
 
 
 # ---------------- CLI ----------------

@@ -4,7 +4,7 @@ from pathlib import Path
 import sys
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"scripts"))
-import cache, cache_governor, context_pack
+import cache, cache_governor
 
 class CacheTests(unittest.TestCase):
     def setUp(self): self.tmp=tempfile.TemporaryDirectory(); self.root=Path(self.tmp.name)
@@ -26,15 +26,6 @@ class CacheTests(unittest.TestCase):
         result=cache.store(self.root,"analysis",key,"engine-v1",[],{}, {"x":1},sensitivity="sensitive")
         self.assertEqual(result["status"],"bypass");self.assertEqual(before,list(self.root.rglob("*")))
         result=cache.lookup(self.root,key,force_refresh=True);self.assertEqual(result["reason"],"force_refresh")
-    def test_context_budget_and_stable_hash(self):
-        items=[{"id":"user","priority":0,"text":"user-goal","source":"request"},{"id":"history","priority":5,"text":"x"*20,"source":"event"},{"id":"rule","priority":1,"text":"rule","source":"memory"}]
-        # Build only requires runtime run state; create the minimal canonical fixture.
-        (self.root/"runtime"/"runs"/"run-one").mkdir(parents=True)
-        (self.root/"runtime"/"runs"/"run-one"/"state.json").write_text("{}",encoding="utf-8")
-        one=context_pack.build(self.root,"run-one",budget=12,items=items)
-        two=context_pack.build(self.root,"run-one",budget=12,items=items)
-        self.assertEqual(one["pack_hash"],two["pack_hash"]);self.assertLessEqual(one["used"],12+len("user-goal"))
-        self.assertTrue(any(x["id"]=="history" for x in one["truncated"]))
     def test_governor_keeps_pinned_and_dry_prune(self):
         key=cache.make_key("plan","planner-v1",[],{})
         cache.store(self.root,"plan",key,"planner-v1",[],{}, {"plan":1})

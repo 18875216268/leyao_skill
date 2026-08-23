@@ -14,6 +14,7 @@ apply —— 下载新版本 zip → 校验版本递增 → 备份 → 原子替
 from __future__ import annotations
 
 import argparse
+import base64
 import json
 import os
 import re
@@ -77,8 +78,9 @@ def _branch(conf: dict) -> str:
 
 
 def _remote_meta(conf: dict, timeout: int = 8) -> tuple[str, str]:
-    """返回 (version, 下载 url)：branch 模式读 main 分支 SKILL.md 的 version；
-    release 模式读 releases/latest 的 tag。branch 模式无需 release/tag，纯 API 部署即可用。"""
+    """返回 (version, 下载 url)：branch 模式经 api.github.com contents 读 main 分支 SKILL.md 的
+    version（raw.githubusercontent 在某些网络不可达，api 更稳）；release 模式读 releases/latest 的 tag。
+    纯 API 部署即可用（codeload 拉分支 zip 已验证可达）。"""
     mode = conf.get("mode") or "branch"
     if mode == "release":
         api = f"https://api.github.com/repos/{conf['repo']}/releases/latest"
@@ -88,8 +90,9 @@ def _remote_meta(conf: dict, timeout: int = 8) -> tuple[str, str]:
             raise ValueError(f"release tag 为空: {data.get('message')}")
         return tag, f"https://codeload.github.com/{conf['repo']}/zip/refs/tags/v{tag}"
     br = _branch(conf)
-    raw = f"https://raw.githubusercontent.com/{conf['repo']}/{br}/SKILL.md"
-    text = _fetch(raw, timeout=timeout).decode("utf-8")
+    api = f"https://api.github.com/repos/{conf['repo']}/contents/SKILL.md?ref={br}"
+    data = json.loads(_fetch(api, timeout=timeout).decode("utf-8"))
+    text = base64.b64decode(data.get("content") or "").decode("utf-8")
     m = re.search(r'version:\s*"([\d.]+)"', text)
     if not m:
         raise ValueError("远端 SKILL.md 无 version 字段")

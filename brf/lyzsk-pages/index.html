@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>运营知识库 · 乐药集团</title>
+<meta name="description" content="运营知识库：药师帮平台、乐药集团、行业术语、业务名词、业务节奏、业务分析。完整内容可通过 /data.json 以 API 方式拉取。">
+<style>
+:root{
+  --bg:#f7f8fa; --card:#ffffff; --line:#e5e8ee; --text:#1f2430; --muted:#6b7280;
+  --brand:#1d6ee0; --brand-soft:#eaf2fe; --h1:#16305c; --h2:#1d4ed8; --h3:#334155; --h4:#475569;
+  --code-bg:#f1f5f9; --search-bg:#ffffff; --shadow:0 1px 3px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"PingFang SC","Microsoft YaHei","Segoe UI",system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.75;font-size:15px}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+
+header{position:sticky;top:0;z-index:50;background:var(--card);border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
+.header-inner{max-width:1280px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;min-width:0}
+.logo-badge{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,#1d6ee0,#0ea5e9);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;flex-shrink:0}
+.logo h1{font-size:18px;font-weight:600;color:var(--h1);white-space:nowrap}
+.logo .sub{font-size:12px;color:var(--muted)}
+.search-wrap{flex:1;min-width:220px;max-width:480px;margin-left:auto;position:relative}
+.search-wrap input{width:100%;padding:9px 14px 9px 38px;border:1px solid var(--line);border-radius:10px;font-size:14px;background:var(--search-bg);outline:none;transition:border-color .15s}
+.search-wrap input:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px;pointer-events:none}
+.api-pill{white-space:nowrap;font-size:13px;background:var(--brand-soft);color:var(--brand);border:1px solid #cfe0fb;border-radius:999px;padding:6px 12px}
+
+.layout{max-width:1280px;margin:0 auto;display:flex;gap:0;min-height:calc(100vh - 65px)}
+nav.toc{width:280px;flex-shrink:0;border-right:1px solid var(--line);background:var(--card);padding:18px 12px;overflow-y:auto;position:sticky;top:65px;height:calc(100vh - 65px)}
+.toc-title{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;padding:0 10px 10px}
+.toc a{display:block;color:var(--text);padding:5px 10px;border-radius:7px;font-size:13.5px;line-height:1.5;border-left:2px solid transparent}
+.toc a:hover{background:var(--bg);text-decoration:none}
+.toc a.l1{font-weight:600;color:var(--h1);margin-top:6px}
+.toc a.l2{padding-left:22px}
+.toc a.l3{padding-left:34px;color:var(--h3);font-size:13px}
+.toc a.l4{padding-left:46px;color:var(--muted);font-size:12.5px}
+.toc a.active{background:var(--brand-soft);border-left-color:var(--brand);color:var(--brand)}
+
+main{flex:1;min-width:0;padding:32px 40px 80px;max-width:900px}
+article h2{font-size:26px;color:var(--h1);margin:34px 0 16px;padding-bottom:10px;border-bottom:2px solid var(--line)}
+article h3{font-size:20px;color:var(--h2);margin:26px 0 12px}
+article h4{font-size:17px;color:var(--h3);margin:20px 0 10px}
+article h5{font-size:15px;color:var(--h4);margin:16px 0 8px}
+article p{margin:10px 0;color:#2a3140}
+article p.lead{font-size:16px;color:var(--muted);border-left:3px solid var(--brand);padding-left:14px}
+.kicker{font-size:12px;color:var(--muted);background:var(--bg);display:inline-block;padding:3px 10px;border-radius:999px;margin-bottom:6px;border:1px solid var(--line)}
+.hero{background:linear-gradient(135deg,#eef4ff,#e8f7ff);border:1px solid #d6e6fb;border-radius:16px;padding:26px 28px;margin-bottom:30px}
+.hero h2{font-size:28px;margin:0 0 8px;border:none;padding:0}
+.hero p{margin:6px 0;color:#3b4a63}
+.hero .meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;font-size:13px;color:var(--muted)}
+.hero .meta b{color:var(--h1);font-weight:600}
+
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;background:var(--card);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
+thead th{background:#f2f6fc;color:var(--h1);font-weight:600;text-align:left;padding:10px 12px;border-bottom:2px solid var(--line);white-space:nowrap}
+tbody td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;word-break:break-word}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:#fafcff}
+td:nth-child(1){white-space:nowrap;font-weight:500}
+
+.api-box{background:#0f172a;color:#e2e8f0;border-radius:12px;padding:18px 20px;margin:20px 0;font-family:ui-monospace,Consolas,"Courier New",monospace;font-size:13px;overflow-x:auto}
+.api-box .tag{color:#7dd3fc}
+.api-box .k{color:#fbbf24}
+.api-box .v{color:#86efac}
+footer{border-top:1px solid var(--line);background:var(--card);padding:26px 24px;text-align:center;color:var(--muted);font-size:13px}
+footer code{background:var(--code-bg);padding:2px 7px;border-radius:5px;font-size:12px}
+mark{background:#fde68a;padding:0 2px;border-radius:3px}
+@media (max-width:900px){
+  .layout{flex-direction:column}
+  nav.toc{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--line);max-height:260px}
+  main{padding:20px 18px 60px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-badge">知</div>
+      <div>
+        <h1>运营知识库</h1>
+        <div class="sub">乐药集团 · 药师帮 · 内部业务知识平台</div>
+      </div>
+    </div>
+    <div class="search-wrap">
+      <span class="search-icon">&#128269;</span>
+      <input id="search" type="text" placeholder="搜索术语、指标、子公司、章节…（支持全文检索）" autocomplete="off">
+    </div>
+    <a class="api-pill" href="data.json" target="_blank">API: /data.json</a>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="toc" id="toc" aria-label="目录">
+    <div class="toc-title">目录</div>
+    <div id="tocList"></div>
+  </nav>
+  <main>
+    <article id="content"></article>
+  </main>
+</div>
+
+<footer>
+  <div>运营知识库 · 部署于 Cloudflare · 数据源：<code>data.json</code>（结构化 JSON，AI 可直接拉取）</div>
+  <div style="margin-top:6px">如需更新内容，请更新源文档后重新生成并部署</div>
+</footer>
+
+<script>
+let DATA=null, TOC=[];
+
+async function load(){
+  try{
+    const r=await fetch('data.json',{cache:'no-cache'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    DATA=await r.json();
+    render();
+  }catch(e){
+    document.getElementById('content').innerHTML=
+      '<div class="hero"><h2>数据加载失败</h2><p>无法读取 data.json：'+e.message+'</p>'+
+      '<p>请确认站点文件完整，或直接访问 <a href="data.json">/data.json</a> 查看原始数据。</p></div>';
+  }
+}
+
+function render(){
+  document.title = DATA.meta.title + ' · 运营知识库';
+  const stats=DATA.meta.stats||{};
+  const html=[]
+  html.push('<div class="hero">');
+  html.push('<h2>'+esc(DATA.meta.title)+'</h2>');
+  html.push('<p>乐药集团内部运营知识库，覆盖药师帮平台、集团组织、行业术语、业务字段与指标、业务节奏与分析方法。</p>');
+  html.push('<p>本页面为人类可读版本；结构化数据可通过 <code style="background:rgba(29,110,224,.1);padding:2px 6px;border-radius:5px">GET /data.json</code> 以 API 方式拉取，供 AI 与程序直接消费。</p>');
+  html.push('<div class="meta"><span>版本 <b>'+esc(DATA.meta.version||'1.0.0')+'</b></span><span>标题 <b>'+stats.headings+'</b></span><span>段落 <b>'+stats.paragraphs+'</b></span><span>表格 <b>'+stats.tables+'</b></span><span>数据大小 <b>'+fmtSize(JSON.stringify(DATA).length)+'</b></span></div>');
+  html.push('</div>');
+
+  let last={1:null,2:null,3:null,4:null};
+  let inTable=false;
+  for(const b of DATA.content){
+    if(b.kind==='heading'){
+      inTable=false;
+      const lv=Math.min(b.level,5);
+      const id='h-'+TOC.length;
+      TOC.push({id,level:lv,text:b.text});
+      html.push('<h'+lv+' id="'+id+'">'+esc(b.text)+'</h'+lv+'>');
+      last[lv]=id;
+      for(let i=lv+1;i<=4;i++)last[i]=null;
+    }else if(b.kind==='para'){
+      if(inTable) inTable=false;
+      html.push('<p>'+esc(b.text).replace(/\n/g,'<br>')+'</p>');
+    }else if(b.kind==='table'){
+      inTable=true;
+      const rows=b.rows||[];
+      if(!rows.length) continue;
+      const cols=Math.max(...rows.map(r=>r.length));
+      let t='<table>';
+      rows.forEach((r,ri)=>{
+        t+='<tr>';
+        for(let ci=0;ci<cols;ci++){
+          const cell=r[ci]||'';
+          const tag=ri===0?'th':'td';
+          t+='<'+tag+'>'+esc(cell).replace(/\n/g,'<br>')+'</'+tag+'>';
+        }
+        t+='</tr>';
+      });
+      t+='</table>';
+      html.push(t);
+    }
+  }
+  document.getElementById('content').innerHTML=html.join('');
+  buildToc();
+}
+
+function buildToc(){
+  const el=document.getElementById('tocList');
+  const links=[];
+  for(const item of TOC){
+    links.push('<a class="l'+item.level+'" href="#'+item.id+'" data-target="'+item.id+'">'+esc(item.text)+'</a>');
+  }
+  el.innerHTML=links.join('');
+
+  el.querySelectorAll('a').forEach(a=>{
+    a.addEventListener('click',e=>{
+      e.preventDefault();
+      const target=document.getElementById(a.dataset.target);
+      if(target){target.scrollIntoView({behavior:'smooth',block:'start'});}
+      el.querySelectorAll('a').forEach(x=>x.classList.remove('active'));
+      a.classList.add('active');
+    });
+  });
+
+  if('IntersectionObserver' in window){
+    const obs=new IntersectionObserver(es=>{
+      es.forEach(e=>{
+        if(e.isIntersecting){
+          el.querySelectorAll('a').forEach(x=>x.classList.remove('active'));
+          const hit=el.querySelector('a[data-target="'+e.target.id+'"]');
+          if(hit) hit.classList.add('active');
+        }
+      });
+    },{rootMargin:'-10% 0px -70% 0px'});
+    TOC.forEach(t=>{const n=document.getElementById(t.id); if(n) obs.observe(n);});
+  }
+}
+
+const searchInput=document.getElementById('search');
+let searchTimer=null;
+searchInput.addEventListener('input',()=>{
+  clearTimeout(searchTimer);
+  searchTimer=setTimeout(()=>doSearch(searchInput.value),150);
+});
+searchInput.addEventListener('keydown',e=>{
+  if(e.key==='Enter'){clearTimeout(searchTimer);doSearch(searchInput.value);}
+});
+
+function doSearch(q){
+  q=q.trim().toLowerCase();
+  const body=document.body;
+  // 清掉上次高亮
+  body.querySelectorAll('mark').forEach(m=>{
+    const parent=m.parentNode; parent.replaceChild(document.createTextNode(m.textContent),m); parent.normalize();
+  });
+  if(!q){
+    document.getElementById('tocList').style.display='';
+    return;
+  }
+  document.getElementById('tocList').style.display='none';
+  // 将全文节点拆为文本节点，逐个高亮
+  const walker=document.createTreeWalker(document.getElementById('content'),NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentElement.tagName!=='SCRIPT'&&n.parentElement.tagName!=='MARK'?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT});
+  const nodes=[];
+  while(walker.nextNode()) nodes.push(walker.currentNode);
+  let hits=0;
+  nodes.forEach(node=>{
+    const text=node.nodeValue;
+    const lower=text.toLowerCase();
+    if(lower.indexOf(q)===-1) return;
+    const frag=document.createDocumentFragment();
+    let pos=0;
+    while(true){
+      const idx=lower.indexOf(q,pos);
+      if(idx===-1){frag.appendChild(document.createTextNode(text.slice(pos)));break;}
+      if(idx>pos) frag.appendChild(document.createTextNode(text.slice(pos,idx)));
+      const m=document.createElement('mark'); m.textContent=text.slice(idx,idx+q.length);
+      frag.appendChild(m); hits++; pos=idx+q.length;
+    }
+    node.parentNode.replaceChild(frag,node);
+  });
+  // 跳转到第一个命中
+  const first=body.querySelector('mark');
+  if(first){first.scrollIntoView({behavior:'smooth',block:'center'});}
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmtSize(n){return n>1024? (n/1024).toFixed(1)+' KB' : n+' B';}
+
+load();
+</script>
+</body>
+</html>

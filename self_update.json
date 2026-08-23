@@ -2,5 +2,5 @@
   "repo": "18875216268/leyao_skill",
   "branch": "main",
   "mode": "branch",
-  "note": "发布后把 repo 改为实际 GitHub 仓库(owner/repo)。mode=branch：check 读 main 分支 SKILL.md 的 version 对比，apply 从 codeload 拉 main 分支 zip（无需 release/tag，纯 API 部署即可用）；mode=release 则用 Releases 最新 tag。"
+  "note": "更新源已配置(公共仓库,匿名可拉)。运行 python scripts/self_update.py auto 即可:检查→有新版本自动更新→报告,无需任何参数与凭证。"
 }

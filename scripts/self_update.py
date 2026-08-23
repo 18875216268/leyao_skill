@@ -219,9 +219,25 @@ def apply(conf: dict, timeout: int = 30) -> dict:
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def auto(conf: dict, timeout: int = 30) -> dict:
+    """auto 一站式：check → 有新版自动 apply → 返回汇总；无新版/网络不可用直接返回。
+    无需多余参数，运行即完成"检查+更新+报告"，更新后即可继续主任务（下次会话生效）。"""
+    chk = check(conf, timeout=min(timeout, 8))
+    if not chk.get("configured"):
+        return chk
+    if chk.get("error") == "NETWORK":
+        return chk  # 网络不可用：静默跳过，不阻塞
+    if not chk.get("update_available"):
+        return chk  # 已最新
+    ap = apply(conf, timeout=timeout)
+    ap["checked"] = {"local": chk.get("local"), "latest": chk.get("latest")}
+    return ap
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="skill 自主更新模块")
-    ap.add_argument("action", choices=["check", "apply"], help="check 自检 / apply 应用更新")
+    ap.add_argument("action", choices=["auto", "check", "apply"],
+                    help="auto 一键检查+自动更新（推荐，无参数直接跑）/ check 自检 / apply 应用更新")
     ap.add_argument("--json", action="store_true", help="JSON 输出（供 AI 解析）")
     ap.add_argument("--timeout", type=int, default=None, help="网络超时秒数")
     args = ap.parse_args()
@@ -229,14 +245,26 @@ def main() -> int:
     t = args.timeout
     if args.action == "check":
         out = check(conf, timeout=t) if t else check(conf)
-    else:
+    elif args.action == "apply":
         out = apply(conf, timeout=t) if t else apply(conf)
+    else:
+        out = auto(conf, timeout=t) if t else auto(conf)
     if args.json:
         print(json.dumps(out, ensure_ascii=False))
     else:
-        print(out.get("note", ""))
-        if out.get("ok") and out.get("update_available"):
-            print(f"  本地 {out.get('local')} → 远端 {out.get('latest')}；执行 apply 更新")
+        if args.action == "auto":
+            if out.get("action") == "updated":
+                print(f"✅ 已自动更新 {out.get('from')} → {out.get('to')}（{out.get('files')} 文件），下次会话生效")
+            elif out.get("ok") and not out.get("update_available") and out.get("configured") is not False:
+                print(f"✅ 已是最新（{out.get('local')}）")
+            elif not out.get("configured"):
+                print("⚠️ 未配置更新源（self_update.json repo）")
+            else:
+                print(f"⏭ 跳过：{out.get('note')}")
+        else:
+            print(out.get("note", ""))
+            if out.get("ok") and out.get("update_available"):
+                print(f"  本地 {out.get('local')} → 远端 {out.get('latest')}；执行 apply 更新")
     return 0 if out.get("ok") else 1
 
 

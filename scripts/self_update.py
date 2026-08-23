@@ -79,7 +79,7 @@ def _branch(conf: dict) -> str:
 
 def _remote_meta(conf: dict, timeout: int = 8) -> tuple[str, str]:
     """返回 (version, 下载 url)：branch 模式经 api.github.com contents 读 main 分支 SKILL.md 的
-    version（raw.githubusercontent 在某些网络不可达，api 更稳）；release 模式读 releases/latest 的 tag。
+    version（纯 API 读版本，避免 CDN 域名差异）；release 模式读 releases/latest 的 tag。
     纯 API 部署即可用（codeload 拉分支 zip 已验证可达）。"""
     mode = conf.get("mode") or "branch"
     if mode == "release":

@@ -1,0 +1,7 @@
+{
+  "object_type":"capability","schema_version":1,"id":"new-capability","version":1,
+  "purpose":"能力用途","capabilities":["inspect_workbook"],
+  "inputs":["xlsx"],"outputs":["json"],
+  "accuracy_score":0.5,"speed_score":0.5,"format_fidelity_score":0.5,"auditability_score":0.5,
+  "network_required":false,"side_effects":["read"],"verification":[],"fallback":[]
+}

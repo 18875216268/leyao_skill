@@ -1,0 +1,5 @@
+{
+  "$schema":"http://json-schema.org/draft-07/schema#","title":"Runtime objects","type":"object",
+  "required":["object_type","id","version","created_at","updated_at"],
+  "properties":{"object_type":{"type":"string"},"schema_version":{"type":"integer","minimum":1},"id":{"type":"string"},"version":{"type":"integer","minimum":1},"created_at":{"type":"string"},"updated_at":{"type":"string"},"run_id":{"type":"string"},"status":{"type":"string"},"gates":{"type":"object"},"inputs":{"type":"array"},"outputs":{"type":"array"}}
+}

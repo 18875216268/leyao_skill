@@ -1,7 +1,7 @@
 ---
 name: leyao_seed_pro
 description: 管理高度自由化的企业数据、复盘、填报和汇报工作。当用户要求理解一个工作文件夹、处理多种输入材料、创建或修改子任务、选择工具和技能、下载整理数据、生成日报周报月报季报年报、品种复盘、客户复盘、专项复盘、模板或自定义交付物时使用。支持父任务编排、动态子任务、过程/执行/结果/归档分区、实时纠偏、分层记忆和可审计的自我进化。
-version: "12.3.2"
+version: "12.3.3"
 metadata:
   intro_zh: "Seed——如果它是一颗种子，是否也会开花呢？您的用心浇灌，会换来一份什么样的回报呢。"
   location: "山城之巅"
@@ -107,7 +107,9 @@ metadata:
 
 → 详见 `references/memory-and-supervision.md`、`references/cache-and-context.md`。
 
-## 5. 自主更新（一键自动 · 每次使用开头跑一次即可）
+## 5. 自主更新（独立维护层 · 非 skill 功能 · 非主链任何部分）
+
+> **定位**:本层不属于主链(0-8)、BRF、治理、记忆任何一环,不参与 skill 功能执行——仅"方便使用"的系统自我维护层,通过 **GitHub API**(api.github.com 读版本 + codeload 拉 zip)拉取更新,避免 CDN 域名网络差异。
 
 - **唯一命令（无需任何参数）**：`python scripts/self_update.py auto`——自动完成"检查 → 有新版本自动拉取更新 → 报告"，跑完即可继续主任务，之后不用管（下次会话生效）；
 - **无需分析**：网络不可用/已最新/未配置 → 直接返回提示，不阻塞、不报错；
@@ -125,7 +127,7 @@ metadata:
 | 规划阶段（3a-3c/4/5/6 详述） | `references/chain-3-6.md` |
 | 执行收尾（7a-7c/8 详述） | `references/chain-7-8.md` |
 | 交付物内容规范（报告/复盘怎么写） | `references/reporting.md` |
-| 自主更新（发布流程/更新机制） | `references/self-update.md` |
+| 自主更新（独立维护层 · 非功能） | `references/self-update.md` |
 | 治理平面（卡点/回环/实时控制/记忆边界） | `references/governance.md` |
 | 对象与绑定（含交付物四类） | `references/domain-model.md` |
 | 工作区与材料 | `references/workspace.md` |

@@ -1,0 +1,5 @@
+{
+  "$schema":"http://json-schema.org/draft-07/schema#","title":"Workspace package","type":"object",
+  "required":["object_type","root","folders","materials","uncertainties"],
+  "properties":{"object_type":{"const":"workspace_package"},"root":{"type":"string"},"folders":{"type":"array"},"materials":{"type":"array"},"relationships":{"type":"array"},"control_files":{"type":"array"},"uncertainties":{"type":"array"},"handoffs":{"type":"array","items":{"type":"object","required":["from_step","to_step","info","source_ref","confidence","status"],"properties":{"from_step":{"type":"string"},"to_step":{"type":"string"},"info":{"type":"string"},"source_ref":{"type":"string"},"confidence":{"type":"string","enum":["high","medium","low"]},"status":{"enum":["pending","consumed","discarded"]}}}}}
+}

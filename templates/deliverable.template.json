@@ -1,0 +1,18 @@
+{
+  "object_type":"deliverable_spec",
+  "schema_version":1,
+  "id":"weekly-report",
+  "version":1,
+  "name":"本周周报",
+  "kind":"report",
+  "type":"weekly",
+  "status":"draft",
+  "period":{"kind":"week","timezone":"Asia/Shanghai"},
+  "scope":{},
+  "bindings":[{"binding_id":"main-task","task_id":"project-progress","role":"status","required":true,"selector":{"policy":"period_match","allowed_states":["confirmed","delivered"]}}],
+  "content":{"variant":"status","sections":["总体情况","核心指标","异常事项","下步计划"]},
+  "template_id":null,
+  "outputs":[{"output_id":"main","format":"markdown","destination":"pending-review"}],
+  "schedule":null,
+  "required_gates":["intent","data","calculation","delivery"]
+}

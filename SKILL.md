@@ -1,7 +1,7 @@
 ---
 name: leyao_seed_pro
 description: 管理高度自由化的企业数据、复盘、填报和汇报工作。当用户要求理解一个工作文件夹、处理多种输入材料、创建或修改子任务、选择工具和技能、下载整理数据、生成日报周报月报季报年报、品种复盘、客户复盘、专项复盘、模板或自定义交付物时使用。支持父任务编排、动态子任务、过程/执行/结果/归档分区、实时纠偏、分层记忆和可审计的自我进化。
-version: "12.3.1"
+version: "12.3.2"
 metadata:
   intro_zh: "Seed——如果它是一颗种子，是否也会开花呢？您的用心浇灌，会换来一份什么样的回报呢。"
   location: "山城之巅"
@@ -107,13 +107,13 @@ metadata:
 
 → 详见 `references/memory-and-supervision.md`、`references/cache-and-context.md`。
 
-## 5. 自主更新（每次使用自检 · 有新版自动更新）
+## 5. 自主更新（一键自动 · 每次使用开头跑一次即可）
 
-- **自检（每次使用开头，轻量不阻塞）**：`python scripts/self_update.py check --json`——对比 GitHub Releases 最新 tag 与本地 `SKILL.md` version；网络不可用静默跳过，返回"已最新/有新版/未配置"三态；
-- **自动更新**：`python scripts/self_update.py apply`——下载新版本 zip → 校验版本递增（防降级/防重复覆盖）→ 备份 → 原子替换 → 失败自动回滚；
-- **保护红线（更新绝不触碰）**：本地记忆 `.workbuddy/`、云端登录态 `.wrangler/`、凭证 `leyou_token.json`、归档 `data.json.archive`、运行产物（.pyc）——只替换源码与文档，**不影响其它功能**；更新后下次会话生效；
-- **更新源**：`self_update.json` 的 `repo` 字段（发布时改为实际 GitHub 仓库 owner/repo）；
-- 发布流程见 `references/self-update.md`。
+- **唯一命令（无需任何参数）**：`python scripts/self_update.py auto`——自动完成"检查 → 有新版本自动拉取更新 → 报告"，跑完即可继续主任务，之后不用管（下次会话生效）；
+- **无需分析**：网络不可用/已最新/未配置 → 直接返回提示，不阻塞、不报错；
+- **保护红线（更新绝不触碰）**：本地记忆 `.workbuddy/`、云端登录态 `.wrangler/`、凭证 `leyou_token.json`、归档 `data.json.archive`、运行产物（.pyc）——只替换源码与文档，**不影响主链与其它功能**；
+- **更新源**：`self_update.json` 的 `repo` 字段（当前已配置 `18875216268/leyao_skill`）；
+- 发布流程（维护者）见 `references/self-update.md`。
 
 ## 6. 路由说明
 
